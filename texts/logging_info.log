@@ -1,0 +1,38 @@
+2026-03-05 02:23:48,606 - INFO - xikmet_food - Bot ishga tushdi | holat=boshlanish
+2026-03-05 02:23:48,607 - INFO - xikmet_food - Bot ishga tushirilmoqda | rejim=polling
+2026-03-05 02:23:49,374 - INFO - xikmet_food - Bot ishga tushdi | holat=polling_boshlandi
+2026-03-05 02:23:59,780 - INFO - xikmet_food - Start buyrug'i bosildi | user_id=7352048199 | username=@ab_21_49
+2026-03-05 02:24:43,563 - INFO - xikmet_food - Bot ishga tushdi | holat=boshlanish
+2026-03-05 02:24:43,563 - INFO - xikmet_food - Bot ishga tushirilmoqda | rejim=polling
+2026-03-05 02:24:45,246 - INFO - xikmet_food - Bot ishga tushdi | holat=polling_boshlandi
+2026-03-05 02:24:47,608 - INFO - xikmet_food - Start buyrug'i bosildi | user_id=7352048199 | username=@ab_21_49
+2026-03-05 02:34:47,402 - INFO - xikmet_food - Bot ishga tushdi | holat=boshlanish
+2026-03-05 02:34:47,403 - INFO - xikmet_food - Bot ishga tushirilmoqda | rejim=polling
+2026-03-05 02:34:48,191 - INFO - xikmet_food - Bot ishga tushdi | holat=polling_boshlandi
+2026-03-05 02:34:52,029 - INFO - xikmet_food - Start buyrug'i bosildi | user_id=7352048199 | username=@ab_21_49
+2026-03-05 02:37:32,509 - INFO - xikmet_food - Bot ishga tushdi | holat=boshlanish
+2026-03-05 02:37:32,509 - INFO - xikmet_food - Bot ishga tushirilmoqda | rejim=polling
+2026-03-05 02:37:33,316 - INFO - xikmet_food - Bot ishga tushdi | holat=polling_boshlandi
+2026-03-05 02:37:36,485 - INFO - xikmet_food - Start buyrug'i bosildi | user_id=7352048199 | username=@ab_21_49
+2026-03-05 02:38:18,392 - INFO - xikmet_food - Bot ishga tushdi | holat=boshlanish
+2026-03-05 02:38:18,392 - INFO - xikmet_food - Bot ishga tushirilmoqda | rejim=polling
+2026-03-05 02:38:19,152 - INFO - xikmet_food - Bot ishga tushdi | holat=polling_boshlandi
+2026-03-05 02:38:21,515 - INFO - xikmet_food - Start buyrug'i bosildi | user_id=7352048199 | username=@ab_21_49
+2026-03-05 02:38:24,144 - INFO - xikmet_food - Tugma signali qabul qilindi | data=lang_uz
+2026-03-05 02:38:24,152 - INFO - xikmet_food - Til tanlandi | user_id=7352048199 | lang_id=1
+2026-03-05 02:38:35,129 - INFO - xikmet_food - Start buyrug'i bosildi | user_id=7352048199 | username=@ab_21_49
+2026-03-05 02:38:55,427 - INFO - xikmet_food - Asosiy menyu yuborildi | chat_id=7352048199 | lang_id=1
+2026-03-05 02:38:55,568 - INFO - xikmet_food - Ro'yxatdan o'tish yakunlandi | user_id=7352048199 | username=@ab_21_49
+2026-03-05 02:39:04,914 - INFO - xikmet_food - Tugma signali qabul qilindi | data=menu_info
+2026-03-05 02:39:04,920 - INFO - xikmet_food - Biz haqimizda sahifasi ochildi | chat_id=7352048199
+2026-03-05 02:39:07,515 - INFO - xikmet_food - Tugma signali qabul qilindi | data=menu_back
+2026-03-05 02:39:07,517 - INFO - xikmet_food - Asosiy menyu tahrirlandi | chat_id=7352048199 | message_id=621 | lang_id=1
+2026-03-05 19:41:26,047 - INFO - xikmet_food - Bot ishga tushdi | holat=boshlanish
+2026-03-05 19:41:26,048 - INFO - xikmet_food - Bot ishga tushirilmoqda | rejim=polling
+2026-03-05 19:41:26,847 - INFO - xikmet_food - Bot ishga tushdi | holat=polling_boshlandi
+2026-03-05 19:41:34,209 - INFO - xikmet_food - Start buyrug'i bosildi | user_id=7352048199 | username=@ab_21_49
+2026-03-05 19:41:35,010 - INFO - xikmet_food - Asosiy menyu yuborildi | chat_id=7352048199 | lang_id=1
+2026-03-05 19:41:39,620 - INFO - xikmet_food - Tugma signali qabul qilindi | data=menu_info
+2026-03-05 19:41:39,622 - INFO - xikmet_food - Biz haqimizda sahifasi ochildi | chat_id=7352048199
+2026-03-05 19:41:41,774 - INFO - xikmet_food - Tugma signali qabul qilindi | data=menu_back
+2026-03-05 19:41:41,774 - INFO - xikmet_food - Asosiy menyu tahrirlandi | chat_id=7352048199 | message_id=624 | lang_id=1
