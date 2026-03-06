@@ -1,5 +1,5 @@
 from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardMarkup, InlineKeyboardButton
-from telegram.ext import ConversationHandler, MessageHandler, Filters, CommandHandler
+from telegram.ext import ConversationHandler, MessageHandler, Filters, CommandHandler, CallbackQueryHandler
 from mini_functions import fix_phone_number
 from for_admins.owner_menu import admin_menu
 from database import Database
@@ -166,9 +166,34 @@ def contact_handler(update, context):
         return ConversationHandler.END
 
 
+def lang_callback(update, context):
+    query = update.callback_query
+    query.answer()
+    chat_id = query.message.chat_id
+    data = query.data
+
+    if data == "lang_uz":
+        db.update_user_data(chat_id, "lang_id", 1)
+        logger.info(f"Til tanlandi | user_id={chat_id} | lang_id=1")
+    elif data == "lang_ru":
+        db.update_user_data(chat_id, "lang_id", 2)
+        logger.info(f"Til tanlandi | user_id={chat_id} | lang_id=2")
+
+    db_user = db.get_user_by_chat_id(chat_id)
+    query.message.delete()
+    
+    context.bot.send_message(
+        chat_id=chat_id,
+        text=globals.TEXT_ENTER_FIRST_NAME[db_user['lang_id']],
+        reply_markup=ReplyKeyboardRemove()
+    )
+    return FIRST_NAME
+
+
 conversation = ConversationHandler(
     entry_points=[
-        CommandHandler('start', start)
+        CommandHandler('start', start),
+        CallbackQueryHandler(lang_callback, pattern='^lang_')
     ],
     states={
         FIRST_NAME: [MessageHandler(Filters.text & ~Filters.command, first_name_handler)],

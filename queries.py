@@ -66,17 +66,7 @@ def query_handler(update, context):
         setting_callback_handler(update, context, db_user)
         return
 
-    if data_sp[0] == "lang":
-        if data_sp[1] == "uz":
-            db.update_user_data(chat_id, "lang_id", 1)
-            logger.info(f"Til tanlandi | user_id={chat_id} | lang_id=1")
-        elif data_sp[1] == "ru":
-            db.update_user_data(chat_id, "lang_id", 2)
-            logger.info(f"Til tanlandi | user_id={chat_id} | lang_id=2")
-        q.answer()
-        registration(reply, chat_id, context)
-
-    elif data_sp[0] == "menu":
+    if data_sp[0] == "menu":
         if data_sp[1] in ["myorders"]:
             my_orders_handler(update, context)
 

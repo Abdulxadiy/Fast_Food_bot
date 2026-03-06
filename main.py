@@ -58,7 +58,7 @@ def main():
     )
 
     updater.start_polling()
-    logger.info("Bot ishga tushdi | holat=polling_boshlandi")
+    logger.info("Bot ishga tushdi | holat: polling_boshlandi")
     updater.idle()
 
 if __name__ == '__main__':
