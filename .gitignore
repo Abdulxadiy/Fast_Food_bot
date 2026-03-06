@@ -208,3 +208,6 @@ __marimo__/
 
 # TOKEN
 config.py
+
+# venv
+xikmet_venv

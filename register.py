@@ -1,7 +1,6 @@
 from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import ConversationHandler, MessageHandler, Filters, CommandHandler, CallbackQueryHandler
 from mini_functions import fix_phone_number
-from for_admins.owner_menu import admin_menu
 from database import Database
 from config import DATA_BASE
 from config import OWNER
@@ -84,8 +83,12 @@ def start(update, context):
         f"Start buyrug'i bosildi | user_id={chat_id} | username=@{username}"
     )
     if user.id == OWNER:
+        ad_buttons = [
+            [InlineKeyboardButton(text=globals.SIMPLE_MENU[db_user['lang_id']], callback_data="choice_simple")],
+            [InlineKeyboardButton(text=globals.ADMIN_MENU[db_user['lang_id']], callback_data="choice_adminmenu")]
+        ]
         update.message.reply_text(globals.WELCOME_TEXT_ADMIN[db_user['lang_id']], reply_markup=ReplyKeyboardRemove())
-        admin_menu(context, user.id, db_user["lang_id"])
+        update.message.reply_text(globals.CHOICE_FOR_ADMIN[db_user['lang_id']], reply_markup=InlineKeyboardMarkup(ad_buttons))
         logger.info(
             f"Admin paneliga kirdi | user_id={chat_id} | username=@{username}"
         )

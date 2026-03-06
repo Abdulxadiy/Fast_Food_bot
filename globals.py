@@ -300,3 +300,18 @@ USER_NOT_FOUND = {
     1: "Foydalanuvchi topilmadi ❌",
     2: "Пользователь не найден ❌"
 }
+
+CHOICE_FOR_ADMIN = {
+    1: "Qaysi paneldan foydalanmoqchisiz? 👇",
+    2: "Какой панелью вы хотите воспользоваться? 👇"
+}
+
+SIMPLE_MENU = {
+    1: "👤 Oddiy panel",
+    2: "👤 Простая панель"
+}
+
+ADMIN_MENU = {
+    1: "👨🏻‍💻 Admin panel",
+    2: "👨🏻‍💻 Админ панель"
+}

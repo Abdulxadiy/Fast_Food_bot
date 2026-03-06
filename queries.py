@@ -1,11 +1,11 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from database import Database
 from config import DATA_BASE
-from register import registration
 from inlines.about_us_inline import about_us
 from inlines.main_inlines import inline_handler
 from inlines.my_orders_inline import my_orders_handler, order_detail_handler
 from main_menu import send_main_menu
+from for_admins.owner_menu import admin_menu
 from for_admins.menu_add import menu_add_handler
 from for_admins.menu_edit import menu_edit_handler
 from for_admins.menu_stop import menu_stop_handler
@@ -14,6 +14,7 @@ from for_admins.menu_statistics import menu_statistics_handler
 from for_admins.admin_actions import admin_action_handler
 from inlines.comments_inline import start_comment_mode, suggestion_callback_handler
 from inlines.setting_inline import settings_handler, setting_callback_handler
+import main_menu
 import logging
 import globals
 
@@ -24,10 +25,15 @@ def query_handler(update, context):
     q = update.callback_query
     logger.info(f"Tugma signali qabul qilindi | data={q.data}")
     chat_id = q.message.chat_id
+    db_user = db.get_user_by_chat_id(chat_id)
     message_id = q.message.message_id
-    reply = update.callback_query.message.reply_text
     data_sp = q.data.split("_")
 
+    if data_sp[0] == "choice":
+        if data_sp[1] == "simple":
+            main_menu.send_main_menu(context, chat_id, db_user['lang_id'])
+        elif data_sp[1] == "adminmenu":
+            admin_menu(context, chat_id, db_user["lang_id"])
     if data_sp[0] == "admin":
         logger.info(f"Admin tugma signali yo'naltirildi | data={q.data}")
         admin_action_handler(update, context)
@@ -56,7 +62,7 @@ def query_handler(update, context):
             menu_statistics_handler(update, context)
             return
 
-    db_user = db.get_user_by_chat_id(chat_id)
+
     if not db_user:
         logger.warning(f"Tugma signali foydalanuvchisi topilmadi | chat_id={chat_id} | data={q.data}")
         q.answer()
