@@ -6,10 +6,8 @@ from database import Database
 from for_admins import admin_globals
 from for_admins.owner_menu import admin_menu
 
-
 db = Database(DATA_BASE)
 logger = logging.getLogger("xikmet_food")
-
 
 def _build_delete_mode_markup(lang_id):
     return InlineKeyboardMarkup(
@@ -30,7 +28,6 @@ def _build_delete_mode_markup(lang_id):
         ]
     )
 
-
 def _build_products_markup(lang_id):
     products = db.get_all_products()
     if not products:
@@ -39,14 +36,13 @@ def _build_products_markup(lang_id):
         )
 
     buttons = []
-    name_col = "name_uz" if lang_id == 1 else "name_ru"
+    name_col = f"name_{admin_globals.LANGUAGE_CODE[lang_id]}"
     for product in products:
         label = f"{product[name_col]} - {product['price']}"
         buttons.append([InlineKeyboardButton(text=label, callback_data=f"adm_dp_{product['id']}")])
 
     buttons.append([InlineKeyboardButton(text=admin_globals.BTN_BACK[lang_id], callback_data="adm_delete")])
     return InlineKeyboardMarkup(buttons)
-
 
 def _build_categories_markup(lang_id):
     categories = db.get_all_categories()
@@ -55,40 +51,38 @@ def _build_categories_markup(lang_id):
             [[InlineKeyboardButton(text=admin_globals.BTN_BACK[lang_id], callback_data="adm_delete")]]
         )
 
-    name_col = "name_uz" if lang_id == 1 else "name_ru"
+    name_col = f"name_{admin_globals.LANGUAGE_CODE[lang_id]}"
     by_id = {c["id"]: c for c in categories}
     buttons = []
 
     for cat in categories:
         parent = by_id.get(cat.get("parent"))
-        parent_name = parent[name_col] if parent else "root"
+        parent_name = parent[name_col] if parent else admin_globals.TEXT_CATEGORY_ROOT[lang_id]
         label = f"{cat[name_col]} ({parent_name})"
         buttons.append([InlineKeyboardButton(text=label, callback_data=f"adm_dc_{cat['id']}")])
 
     buttons.append([InlineKeyboardButton(text=admin_globals.BTN_BACK[lang_id], callback_data="adm_delete")])
     return InlineKeyboardMarkup(buttons)
 
-
 def _build_product_text(product, lang_id):
-    name_col = "name_uz" if lang_id == 1 else "name_ru"
-    desc_col = "description_uz" if lang_id == 1 else "description_ru"
+    suffix = admin_globals.LANGUAGE_CODE[lang_id]
+    name_col = f"name_{suffix}"
+    desc_col = f"description_{suffix}"
 
     text = f"{admin_globals.TEXT_DELETE_PRODUCT_DETAIL[lang_id]}\n\n"
-    text += f"ID: {product['id']}\n"
+    text += f"{admin_globals.TEXT_FIELD_ID[lang_id]}: {product['id']}\n"
     text += f"{product[name_col]}\n"
-    text += f"Narxi: {product['price']}\n"
+    text += f"{admin_globals.TEXT_FIELD_PRICE[lang_id]}: {product['price']}\n"
     text += f"\n{product.get(desc_col) or ''}"
     return text
 
-
 def _build_category_text(category, lang_id):
-    name_col = "name_uz" if lang_id == 1 else "name_ru"
+    name_col = f"name_{admin_globals.LANGUAGE_CODE[lang_id]}"
     return (
         f"{admin_globals.TEXT_DELETE_CATEGORY_DETAIL[lang_id]}\n\n"
-        f"ID: {category['id']}\n"
-        f"Nomi: {category[name_col]}\n"
+        f"{admin_globals.TEXT_FIELD_ID[lang_id]}: {category['id']}\n"
+        f"{admin_globals.TEXT_FIELD_NAME[lang_id]}: {category[name_col]}\n"
     )
-
 
 def _build_product_menu(product_id, lang_id):
     return InlineKeyboardMarkup(
@@ -103,7 +97,6 @@ def _build_product_menu(product_id, lang_id):
         ]
     )
 
-
 def _build_category_menu(category_id, lang_id):
     return InlineKeyboardMarkup(
         [
@@ -116,7 +109,6 @@ def _build_category_menu(category_id, lang_id):
             [InlineKeyboardButton(text=admin_globals.BTN_BACK[lang_id], callback_data="adm_dmode_category")],
         ]
     )
-
 
 def _build_confirm_product_menu(product_id, lang_id):
     return InlineKeyboardMarkup(
@@ -136,7 +128,6 @@ def _build_confirm_product_menu(product_id, lang_id):
         ]
     )
 
-
 def _build_confirm_category_menu(category_id, lang_id):
     return InlineKeyboardMarkup(
         [
@@ -154,7 +145,6 @@ def _build_confirm_category_menu(category_id, lang_id):
             ],
         ]
     )
-
 
 def menu_delete_handler(update, context):
     query = update.callback_query
@@ -276,7 +266,10 @@ def menu_delete_handler(update, context):
         logger.info(
             f"Kategoriya kaskad o'chirildi | admin_id={admin_id} | category_id={category_id} | categories={cat_count} | products={product_count}"
         )
-        msg = f"{admin_globals.TEXT_CATEGORY_DELETED[lang_id]}\nCategories: {cat_count} | Products: {product_count}"
+        msg = (
+            f"{admin_globals.TEXT_CATEGORY_DELETED[lang_id]}\n"
+            f"{admin_globals.TEXT_DELETE_RESULT[lang_id].format(categories=cat_count, products=product_count)}"
+        )
         context.bot.send_message(chat_id=admin_id, text=msg)
         admin_menu(context, admin_id, lang_id, query.message.message_id)
         return

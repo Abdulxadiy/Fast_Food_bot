@@ -19,7 +19,6 @@ def send_main_menu(context, chat_id, lang_id, message_id=None):
         ]
     ]
     if message_id:
-        logger.info(f"Asosiy menyu tahrirlandi | chat_id={chat_id} | message_id={message_id} | lang_id={lang_id}")
         context.bot.edit_message_text(
             chat_id=chat_id,
             message_id=message_id,
@@ -27,7 +26,6 @@ def send_main_menu(context, chat_id, lang_id, message_id=None):
             reply_markup=InlineKeyboardMarkup(buttons)
         )
     else:
-        logger.info(f"Asosiy menyu yuborildi | chat_id={chat_id} | lang_id={lang_id}")
         context.bot.send_message(
             chat_id=chat_id,
             text=globals.TEXT_MAIN_MENU[lang_id],

@@ -28,7 +28,6 @@ def _build_stat_menu(lang_id):
         ]
     )
 
-
 def _format_stats_text(items, lang_id, monthly=False):
     header = (
         admin_globals.TEXT_STAT_MONTH_HEADER[lang_id]
@@ -41,15 +40,14 @@ def _format_stats_text(items, lang_id, monthly=False):
 
     lines = [header, "+--------------------------------+"]
     for idx, row in enumerate(items, start=1):
-        name_col = "name_uz" if lang_id == 1 else "name_ru"
-        name = row.get(name_col) or f"[deleted product #{row['product_id']}]"
+        name_col = f"name_{admin_globals.LANGUAGE_CODE[lang_id]}"
+        name = row.get(name_col) or admin_globals.TEXT_FALLBACK_DELETED_PRODUCT[lang_id].format(row["product_id"])
         sold_count = row.get("sold_count", 0)
         lines.append(f"| {idx}. {name}")
-        lines.append(f"|    Sotilgan: {sold_count} ta")
+        lines.append(f"|    {admin_globals.TEXT_STAT_SOLD[lang_id].format(sold_count)}")
         lines.append("+--------------------------------+")
 
     return "\n".join(lines)
-
 
 def menu_statistics_handler(update, context):
     query = update.callback_query

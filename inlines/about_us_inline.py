@@ -1,6 +1,5 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from main_menu import send_main_menu
-from mini_functions import read
 from database import Database
 from config import DATA_BASE
 import logging
@@ -18,7 +17,6 @@ def about_us(update, context):
     data_sp = query.data.split("_")
 
     if data_sp[1] == "back":
-        logger.info(f"Biz haqimizda oynasidan orqaga qaytildi | chat_id={chat_id}")
         send_main_menu(context, chat_id, db_user["lang_id"], message_id)
         return
 
@@ -26,7 +24,5 @@ def about_us(update, context):
         text=globals.BTN_BACK[db_user["lang_id"]],
         callback_data="menu_back"
     )
-    path = "texts/about_us.txt"
-    text = read(path)
-    logger.info(f"Biz haqimizda sahifasi ochildi | chat_id={chat_id}")
+    text = globals.TEXT_ABOUT_US[db_user["lang_id"]]
     query.message.edit_text(text=text, reply_markup=InlineKeyboardMarkup([[button]]))

@@ -6,8 +6,14 @@ import globals
 from config import DATA_BASE
 from database import Database
 from for_admins.admin_globals import (
+    TEXT_ADMIN_REPLY_SENT,
+    TEXT_COMMENT_REPLY_EMPTY,
     TEXT_ASK_REJECT_REASON,
+    TEXT_ORDER_ACCEPTED_MARK,
+    TEXT_ORDER_ACCEPTED_NOTICE,
     TEXT_ORDER_LABEL,
+    TEXT_ORDER_REJECTED_MARK,
+    TEXT_REASON_UNKNOWN,
     TEXT_REASON_MISSING,
     TEXT_REASON_SENT,
 )
@@ -18,8 +24,7 @@ from inlines.setting_inline import handle_settings_text_message
 
 db = Database(DATA_BASE)
 logger = logging.getLogger("xikmet_food")
-admin_awaiting_reason = {}  # { admin_id: {'order_id': id, 'user_chat_id': id, 'lang_id': id} }
-
+admin_awaiting_reason = {}
 
 def admin_action_handler(update: Update, context):
     query = update.callback_query
@@ -46,11 +51,11 @@ def admin_action_handler(update: Update, context):
             logger.info(f"Buyurtma qabul qilindi | order_id={order_id} | admin_id={admin_id} | user_chat_id={user_chat_id}")
             try:
                 original_text = query.message.text or ""
-                query.edit_message_text(text=original_text + "\n\nACCEPTED")
+                query.edit_message_text(text=original_text + f"\n\n{TEXT_ORDER_ACCEPTED_MARK[admin_lang_id]}")
             except Exception as e:
                 logger.warning(f"Admin kanaldagi xabar tahrirlanmadi | order_id={order_id} | xato={e}")
                 try:
-                    context.bot.send_message(chat_id=admin_id, text=f"Order #{order_id} accepted.")
+                    context.bot.send_message(chat_id=admin_id, text=TEXT_ORDER_ACCEPTED_NOTICE[admin_lang_id].format(order_id))
                 except Exception as notify_e:
                     logger.warning(f"Adminga tasdiq xabari yuborilmadi | order_id={order_id} | admin_id={admin_id} | xato={notify_e}")
 
@@ -68,7 +73,7 @@ def admin_action_handler(update: Update, context):
 
             try:
                 original_text = query.message.text or ""
-                query.edit_message_text(text=original_text + "\n\nREJECTED")
+                query.edit_message_text(text=original_text + f"\n\n{TEXT_ORDER_REJECTED_MARK[admin_lang_id]}")
             except Exception as e:
                 logger.warning(f"Admin kanaldagi xabar tahrirlanmadi | order_id={order_id} | xato={e}")
 
@@ -88,7 +93,7 @@ def admin_action_handler(update: Update, context):
                 try:
                     context.bot.send_message(
                         chat_id=user_chat_id,
-                        text=globals.TEXT_ORDER_REJECTED[lang_id].format("Unknown"),
+                        text=globals.TEXT_ORDER_REJECTED[lang_id].format(TEXT_REASON_UNKNOWN[admin_lang_id]),
                     )
                 except Exception as send_e:
                     logger.error(f"Foydalanuvchiga rad etish xabari yuborilmadi | order_id={order_id} | user_chat_id={user_chat_id} | xato={send_e}")
@@ -96,7 +101,6 @@ def admin_action_handler(update: Update, context):
 
     except Exception as e:
         logger.error(f"Admin amali handlerida xato | xato={e}")
-
 
 def admin_reply_handler(update: Update, context):
 

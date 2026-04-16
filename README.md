@@ -1,14 +1,14 @@
 # Xikmet Food Telegram Bot
 
 <p align="center">
-  A bilingual Telegram bot for fast-food ordering, delivery coordination, customer feedback, and owner-side product management.
+  A multilingual Telegram bot for fast-food ordering, delivery coordination, customer feedback, and owner-side product management.
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.x-blue?style=for-the-badge&logo=python" alt="Python">
   <img src="https://img.shields.io/badge/Telegram-Bot%20API-26A5E4?style=for-the-badge&logo=telegram" alt="Telegram Bot API">
   <img src="https://img.shields.io/badge/Database-SQLite-07405E?style=for-the-badge&logo=sqlite" alt="SQLite">
-  <img src="https://img.shields.io/badge/Languages-Uzbek%20%7C%20Russian-success?style=for-the-badge" alt="Languages">
+  <img src="https://img.shields.io/badge/Languages-Uzbek%20%7C%20Russian%20%7C%20English-success?style=for-the-badge" alt="Languages">
 </p>
 
 ## Overview
@@ -22,7 +22,7 @@ The project also includes an **owner-only admin workflow** for managing the cata
 ### Customer features
 
 - Register users with first name, last name, phone number, and preferred language.
-- Support **Uzbek** and **Russian** interfaces.
+- Support **Uzbek**, **Russian**, and **English** interfaces.
 - Browse a hierarchical product catalog through inline keyboards.
 - View product details, price, description, and optional product image.
 - Add products to a cart with quantity selection.
@@ -40,7 +40,7 @@ The project also includes an **owner-only admin workflow** for managing the cata
 - Send a rejection reason back to the customer.
 - Manage the catalog from Telegram without touching the database manually.
 - Add parent categories and child categories.
-- Add products with bilingual names, descriptions, prices, and optional images.
+- Add products with trilingual names, descriptions, prices, and optional images.
 - Edit product names, prices, descriptions, and images.
 - Temporarily remove products from sale and return them later.
 - Delete products.
@@ -62,10 +62,11 @@ The project also includes an **owner-only admin workflow** for managing the cata
 
 ## Supported Languages
 
-This project works in two user-facing languages:
+This project works in three user-facing languages:
 
 - Uzbek
 - Russian
+- English
 
 Programming language used in the codebase:
 
@@ -85,7 +86,7 @@ Xikmet_Food/
 ├── mini_functions.py          # Helpers
 ├── inlines/                   # Customer-side inline handlers
 ├── for_admins/                # Admin/owner handlers
-├── texts/                     # Static text content and logs
+├── texts/                     # Logs
 ├── db_design/                 # Database design reference
 ├── xikmet_food.db             # SQLite database
 └── config.py                  # Local configuration

@@ -16,20 +16,24 @@ def _build_products_markup(lang_id):
         )
 
     buttons = []
-    name_col = "name_uz" if lang_id == 1 else "name_ru"
+    name_col = f"name_{admin_globals.LANGUAGE_CODE[lang_id]}"
     for product in products:
         status = product.get("status_stop") or 0
-        status_mark = "OFF" if status == 1 else "ON"
+        status_mark = (
+            admin_globals.TEXT_STATUS_SWITCH_OFF[lang_id]
+            if status == 1
+            else admin_globals.TEXT_STATUS_SWITCH_ON[lang_id]
+        )
         label = f"{product[name_col]} - {product['price']} ({status_mark})"
         buttons.append([InlineKeyboardButton(text=label, callback_data=f"adm_sp_{product['id']}")])
 
     buttons.append([InlineKeyboardButton(text=admin_globals.BTN_BACK[lang_id], callback_data="adm_back")])
     return InlineKeyboardMarkup(buttons)
 
-
 def _build_stop_detail_text(product, lang_id):
-    name_col = "name_uz" if lang_id == 1 else "name_ru"
-    desc_col = "description_uz" if lang_id == 1 else "description_ru"
+    suffix = admin_globals.LANGUAGE_CODE[lang_id]
+    name_col = f"name_{suffix}"
+    desc_col = f"description_{suffix}"
     status = product.get("status_stop") or 0
     status_text = (
         admin_globals.TEXT_STOP_STATUS_INACTIVE[lang_id]
@@ -38,13 +42,12 @@ def _build_stop_detail_text(product, lang_id):
     )
 
     text = f"{admin_globals.TEXT_STOP_PRODUCT_DETAIL[lang_id]}\n\n"
-    text += f"ID: {product['id']}\n"
+    text += f"{admin_globals.TEXT_FIELD_ID[lang_id]}: {product['id']}\n"
     text += f"{product[name_col]}\n"
-    text += f"Narxi: {product['price']}\n"
-    text += f"Holati: {status_text}\n"
+    text += f"{admin_globals.TEXT_FIELD_PRICE[lang_id]}: {product['price']}\n"
+    text += f"{admin_globals.TEXT_FIELD_STATUS[lang_id]}: {status_text}\n"
     text += f"\n{product.get(desc_col) or ''}"
     return text
-
 
 def _build_stop_detail_markup(product_id, status_stop, lang_id):
     action_btn = (
@@ -65,7 +68,6 @@ def _build_stop_detail_markup(product_id, status_stop, lang_id):
             [InlineKeyboardButton(text=admin_globals.BTN_BACK[lang_id], callback_data="adm_stop")],
         ]
     )
-
 
 def menu_stop_handler(update, context):
     query = update.callback_query

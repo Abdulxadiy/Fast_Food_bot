@@ -11,13 +11,11 @@ db = Database(DATA_BASE)
 logger = logging.getLogger("xikmet_food")
 admin_cat_state = {}
 
-
 def _slugify_filename(text):
     s = (text or "").strip().lower()
     s = re.sub(r"\s+", "-", s)
     s = re.sub(r"[^a-z0-9_-]", "", s)
     return s or "product"
-
 
 def _build_unique_image_path(base_name):
     os.makedirs("images", exist_ok=True)
@@ -29,7 +27,6 @@ def _build_unique_image_path(base_name):
             return path
         i += 1
 
-
 def _save_photo_to_images(update, product_name_uz):
     if not update.message.photo:
         return None
@@ -39,11 +36,10 @@ def _save_photo_to_images(update, product_name_uz):
     tg_file.download(custom_path=image_path)
     return image_path
 
-
 def _build_category_markup(lang_id, parent_id=None):
     categories = db.get_categories_by_parent(parent_id=parent_id)
     buttons = []
-    name_col = "name_uz" if lang_id == 1 else "name_ru"
+    name_col = f"name_{admin_globals.LANGUAGE_CODE[lang_id]}"
 
     for category in categories:
         buttons.append(
@@ -81,7 +77,6 @@ def _build_category_markup(lang_id, parent_id=None):
         )
 
     return InlineKeyboardMarkup(buttons)
-
 
 def menu_add_handler(update, context):
     query = update.callback_query
@@ -145,7 +140,6 @@ def menu_add_handler(update, context):
         context.bot.send_message(chat_id=admin_id, text=admin_globals.TEXT_ENTER_CHILD_CATEGORY_UZ[lang_id])
         return
 
-
 def handle_admin_category_text(update, context):
     if update.message is None:
         return False
@@ -173,9 +167,16 @@ def handle_admin_category_text(update, context):
 
     if step == "cat_name_ru":
         data["name_ru"] = text
+        state["step"] = "cat_name_en"
+        update.message.reply_text(admin_globals.TEXT_ENTER_ROOT_EN[lang_id])
+        return True
+
+    if step == "cat_name_en":
+        data["name_en"] = text
         new_cat_id = db.create_category(
             name_uz=data["name_uz"],
             name_ru=data["name_ru"],
+            name_en=data["name_en"],
             parent=data["parent"],
         )
         update.message.reply_text(admin_globals.TEXT_CATEGORY_SAVED[lang_id].format(new_cat_id))
@@ -192,6 +193,12 @@ def handle_admin_category_text(update, context):
 
     if step == "child_cat_name_ru":
         data["cat_name_ru"] = text
+        state["step"] = "child_cat_name_en"
+        update.message.reply_text(admin_globals.TEXT_ENTER_CHILD_CATEGORY_EN[lang_id])
+        return True
+
+    if step == "child_cat_name_en":
+        data["cat_name_en"] = text
         state["step"] = "product_price"
         update.message.reply_text(admin_globals.TEXT_ENTER_PRODUCT_PRICE[lang_id])
         return True
@@ -213,6 +220,12 @@ def handle_admin_category_text(update, context):
 
     if step == "product_desc_ru":
         data["product_desc_ru"] = text
+        state["step"] = "product_desc_en"
+        update.message.reply_text(admin_globals.TEXT_ENTER_PRODUCT_DESC_EN[lang_id])
+        return True
+
+    if step == "product_desc_en":
+        data["product_desc_en"] = text
         state["step"] = "product_image"
         update.message.reply_text(admin_globals.TEXT_ENTER_PRODUCT_IMAGE[lang_id])
         return True
@@ -230,16 +243,19 @@ def handle_admin_category_text(update, context):
         new_cat_id = db.create_category(
             name_uz=data["cat_name_uz"],
             name_ru=data["cat_name_ru"],
+            name_en=data["cat_name_en"],
             parent=parent_id,
         )
 
         new_product_id = db.create_product(
             name_uz=data["cat_name_uz"],
             name_ru=data["cat_name_ru"],
+            name_en=data["cat_name_en"],
             category_id=new_cat_id,
             price=data["product_price"],
             description_uz=data["product_desc_uz"],
             description_ru=data["product_desc_ru"],
+            description_en=data["product_desc_en"],
             image=image_path,
         )
 

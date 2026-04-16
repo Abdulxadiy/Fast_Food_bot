@@ -7,6 +7,7 @@ from config import OWNER
 import globals
 import main_menu
 import logging
+from for_admins import admin_globals
 
 db = Database(DATA_BASE)
 logger = logging.getLogger("xikmet_food")
@@ -19,11 +20,12 @@ def registration(reply, chat_id, context):
         db.create_user(chat_id)
         buttons = [
             [InlineKeyboardButton(text=globals.BTN_LANG_UZ, callback_data="lang_uz")],
-            [InlineKeyboardButton(text=globals.BTN_LANG_RU, callback_data="lang_ru")]
+            [InlineKeyboardButton(text=globals.BTN_LANG_RU, callback_data="lang_ru")],
+            [InlineKeyboardButton(text=globals.BTN_LANG_EN, callback_data="lang_en")],
         ]
-        reply(text=globals.WELCOME_TEXT)
+        reply(text=globals.WELCOME_TEXT[1])
         reply(
-            text=globals.CHOOSE_LANG,
+            text=globals.CHOOSE_LANG[1],
             reply_markup=InlineKeyboardMarkup(buttons)
         )
         return ConversationHandler.END
@@ -31,10 +33,11 @@ def registration(reply, chat_id, context):
     elif not db_user["lang_id"]:
         buttons = [
             [InlineKeyboardButton(text=globals.BTN_LANG_UZ, callback_data="lang_uz")],
-            [InlineKeyboardButton(text=globals.BTN_LANG_RU, callback_data="lang_ru")]
+            [InlineKeyboardButton(text=globals.BTN_LANG_RU, callback_data="lang_ru")],
+            [InlineKeyboardButton(text=globals.BTN_LANG_EN, callback_data="lang_en")],
         ]
         reply(
-            text=globals.CHOOSE_LANG,
+            text=globals.CHOOSE_LANG[1],
             reply_markup=InlineKeyboardMarkup(buttons)
         )
         return ConversationHandler.END
@@ -84,20 +87,21 @@ def start(update, context):
     )
     if user.id == OWNER:
         ad_buttons = [
-            [InlineKeyboardButton(text=globals.SIMPLE_MENU[db_user['lang_id']], callback_data="choice_simple")],
-            [InlineKeyboardButton(text=globals.ADMIN_MENU[db_user['lang_id']], callback_data="choice_adminmenu")]
+            [InlineKeyboardButton(text=admin_globals.SIMPLE_MENU[db_user['lang_id']], callback_data="choice_simple")],
+            [InlineKeyboardButton(text=admin_globals.ADMIN_MENU[db_user['lang_id']], callback_data="choice_adminmenu")]
         ]
-        update.message.reply_text(globals.WELCOME_TEXT_ADMIN[db_user['lang_id']], reply_markup=ReplyKeyboardRemove())
-        update.message.reply_text(globals.CHOICE_FOR_ADMIN[db_user['lang_id']], reply_markup=InlineKeyboardMarkup(ad_buttons))
+        update.message.reply_text(admin_globals.WELCOME_TEXT_ADMIN[db_user['lang_id']], reply_markup=ReplyKeyboardRemove())
+        update.message.reply_text(admin_globals.CHOICE_FOR_ADMIN[db_user['lang_id']], reply_markup=InlineKeyboardMarkup(ad_buttons))
         logger.info(
             f"Admin paneliga kirdi | user_id={chat_id} | username=@{username}"
         )
         return ConversationHandler.END
     return registration(reply, chat_id, context)
 
-
 def cancel(update, context):
-    update.message.reply_text("Barchasi bekor qlindi ⚠️")
+    db_user = db.get_user_by_chat_id(update.message.chat_id)
+    lang_id = db_user["lang_id"] if db_user and db_user.get("lang_id") else 1
+    update.message.reply_text(globals.TEXT_CANCEL[lang_id])
     username = update.message.from_user.username or "username yo'q"
     logger.info(
         f"Ro'yxatdan o'tish bekor qilindi | user_id={update.message.from_user.id} | username=@{username}"
@@ -111,7 +115,6 @@ def first_name_handler(update, context):
     db.update_user_data(user.id, "first_name", first_name)
     update.message.reply_text(text=globals.TEXT_ENTER_LAST_NAME[db_user['lang_id']])
     return LAST_NAME
-
 
 def last_name_handler(update, context):
     user = update.message.from_user
@@ -131,7 +134,6 @@ def last_name_handler(update, context):
         )
     )
     return PHONE
-
 
 def contact_handler(update, context):
     user = update.message.from_user
@@ -168,7 +170,6 @@ def contact_handler(update, context):
         )
         return ConversationHandler.END
 
-
 def lang_callback(update, context):
     query = update.callback_query
     query.answer()
@@ -181,17 +182,19 @@ def lang_callback(update, context):
     elif data == "lang_ru":
         db.update_user_data(chat_id, "lang_id", 2)
         logger.info(f"Til tanlandi | user_id={chat_id} | lang_id=2")
+    elif data == "lang_en":
+        db.update_user_data(chat_id, "lang_id", 3)
+        logger.info(f"Til tanlandi | user_id={chat_id} | lang_id=3")
 
     db_user = db.get_user_by_chat_id(chat_id)
     query.message.delete()
-    
+
     context.bot.send_message(
         chat_id=chat_id,
         text=globals.TEXT_ENTER_FIRST_NAME[db_user['lang_id']],
         reply_markup=ReplyKeyboardRemove()
     )
     return FIRST_NAME
-
 
 conversation = ConversationHandler(
     entry_points=[

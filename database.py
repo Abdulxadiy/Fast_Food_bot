@@ -7,10 +7,11 @@ class Database:
 
         self.cur.execute("PRAGMA foreign_keys = ON")
         self.conn.commit()
-        self._ensure_suggestions_columns() # suggestions jadvalida comment uchun kerakli ustunlar borligini tekshirib olamiz
+        self._ensure_suggestions_columns()
+        self._ensure_multilang_columns()
 
     def _ensure_suggestions_columns(self):
-        """Agar suggestions jadvalida kerakli ustunlar bo'lmasa, avtomatik qo'shib qo'yadi."""
+
         self.cur.execute(
             """
             SELECT name FROM sqlite_master
@@ -31,6 +32,70 @@ class Database:
             self.cur.execute("""ALTER TABLE suggestions ADD COLUMN replied_at TEXT""")
         if "admin_id" not in columns:
             self.cur.execute("""ALTER TABLE suggestions ADD COLUMN admin_id INTEGER""")
+        self.conn.commit()
+
+    def _ensure_multilang_columns(self):
+        self._ensure_table_columns(
+            "category",
+            {
+                "name_en": "TEXT",
+            },
+        )
+        self._ensure_table_columns(
+            "product",
+            {
+                "name_en": "TEXT",
+                "description_en": "TEXT",
+            },
+        )
+
+    def _ensure_table_columns(self, table_name, columns_to_add):
+        self.cur.execute(
+            """
+            SELECT name FROM sqlite_master
+            WHERE type='table' AND name=?
+            """,
+            (table_name,),
+        )
+        if not self.cur.fetchone():
+            return
+
+        self.cur.execute(f"""PRAGMA table_info({table_name})""")
+        existing_columns = {row[1] for row in self.cur.fetchall()}
+
+        for column_name, column_type in columns_to_add.items():
+            if column_name not in existing_columns:
+                self.cur.execute(
+                    f"""ALTER TABLE {table_name} ADD COLUMN {column_name} {column_type}"""
+                )
+
+        if table_name == "category" and "name_en" in columns_to_add:
+            self.cur.execute(
+                """
+                UPDATE category
+                SET name_en = COALESCE(NULLIF(name_en, ''), name_ru, name_uz)
+                WHERE name_en IS NULL OR name_en = ''
+                """
+            )
+
+        if table_name == "product":
+            if "name_en" in columns_to_add:
+                self.cur.execute(
+                    """
+                    UPDATE product
+                    SET name_en = COALESCE(NULLIF(name_en, ''), name_ru, name_uz)
+                    WHERE name_en IS NULL OR name_en = ''
+                    """
+                )
+            if "description_en" in columns_to_add:
+                self.cur.execute(
+                    """
+                    UPDATE product
+                    SET description_en = COALESCE(NULLIF(description_en, ''), description_ru, description_uz)
+                    WHERE description_en IS NULL OR description_en = ''
+                    """
+                )
+
         self.conn.commit()
 
     def create_user(self, chat_id):
@@ -80,14 +145,14 @@ class Database:
     def create_order(self, user_id, payment_type, address, created_at):
         self.cur.execute("""INSERT INTO "order" (user, payment_type, address, created_at) VALUES (?, ?, ?, ?)""", (user_id, payment_type, address, created_at))
         self.conn.commit()
-        return self.cur.lastrowid # Eng so'nggi qo'shilgan buyurtma id sini qaytaradi
+        return self.cur.lastrowid
 
     def add_order_product(self, order_id, product_id, amount, created_at):
         self.cur.execute("""INSERT INTO order_product ("order", product, amount, created_at) VALUES (?, ?, ?, ?)""", (order_id, product_id, amount, created_at))
         self.conn.commit()
 
     def update_order_status(self, order_id, status):
-        # status: 0 (Kutmoqda-default), 1 (Qabul qilingan), -1 (Rad etilgan)
+
         self.cur.execute("""UPDATE "order" SET status = ? WHERE id = ?""", (status, order_id))
         self.conn.commit()
 
@@ -109,12 +174,13 @@ class Database:
                 op.product AS product_id,
                 p.name_uz,
                 p.name_ru,
+                p.name_en,
                 SUM(op.amount) AS sold_count
             FROM order_product op
             JOIN "order" o ON o.id = op."order"
             LEFT JOIN product p ON p.id = op.product
             WHERE o.status = 1 {date_filter}
-            GROUP BY op.product, p.name_uz, p.name_ru
+            GROUP BY op.product, p.name_uz, p.name_ru, p.name_en
             ORDER BY sold_count DESC, op.product ASC
             """,
             tuple(params),
@@ -122,7 +188,7 @@ class Database:
         return dict_fetchall(self.cur)
 
     def create_suggestion(self, user_id, message, status=0, created_at=None):
-        # Foydalanuvchi fikrini suggestions jadvaliga yozamiz
+
         self.cur.execute(
             """
             INSERT INTO suggestions (user, message, status, created_at)
@@ -131,20 +197,20 @@ class Database:
             (user_id, message, status, created_at),
         )
         self.conn.commit()
-        return self.cur.lastrowid # Yangi yozilgan comment id ni qaytaramiz
+        return self.cur.lastrowid
 
     def get_suggestion_by_id(self, suggestion_id):
-        # Commentni id bo'yicha topib qaytaradi
+
         self.cur.execute("""SELECT * FROM suggestions WHERE id = ?""", (suggestion_id,))
         return dict_fetchone(self.cur)
 
     def get_user_by_id(self, user_id):
-        # users jadvalidan ichki id bo'yicha foydalanuvchini topadi
+
         self.cur.execute("""SELECT * FROM users WHERE id = ?""", (user_id,))
         return dict_fetchone(self.cur)
 
     def update_suggestion_status(self, suggestion_id, status, read_at=None, admin_id=None):
-        # Comment holatini yangilaydi: 0 (o'qilmagan) -> 1 (o'qilgan)
+
         self.cur.execute(
             """
             UPDATE suggestions
@@ -156,7 +222,7 @@ class Database:
         self.conn.commit()
 
     def save_suggestion_reply(self, suggestion_id, admin_id, reply_text, replied_at, status=1, read_at=None):
-        # Admin javobini saqlaydi va commentni o'qilgan holatga o'tkazadi
+
         self.cur.execute(
             """
             UPDATE suggestions
@@ -168,16 +234,48 @@ class Database:
         self.conn.commit()
 
     def get_all_categories(self):
-        self.cur.execute("""SELECT id, name_uz, name_ru, parent FROM category ORDER BY id""")
+        self.cur.execute("""SELECT id, name_uz, name_ru, name_en, parent FROM category ORDER BY id""")
         return dict_fetchall(self.cur)
 
-    def create_product(self, name_uz, name_ru, category_id, price, description_uz, description_ru, image=None):
+    def create_product(
+        self,
+        name_uz,
+        name_ru,
+        name_en,
+        category_id,
+        price,
+        description_uz,
+        description_ru,
+        description_en,
+        image=None,
+    ):
         self.cur.execute(
             """
-            INSERT INTO product (name_uz, name_ru, category, price, status_stop, description_uz, description_ru, image)
-            VALUES (?, ?, ?, ?, 0, ?, ?, ?)
+            INSERT INTO product (
+                name_uz,
+                name_ru,
+                name_en,
+                category,
+                price,
+                status_stop,
+                description_uz,
+                description_ru,
+                description_en,
+                image
+            )
+            VALUES (?, ?, ?, ?, ?, 0, ?, ?, ?, ?)
             """,
-            (name_uz, name_ru, category_id, price, description_uz, description_ru, image),
+            (
+                name_uz,
+                name_ru,
+                name_en,
+                category_id,
+                price,
+                description_uz,
+                description_ru,
+                description_en,
+                image,
+            ),
         )
         self.conn.commit()
         return self.cur.lastrowid
@@ -186,10 +284,10 @@ class Database:
         self.cur.execute("""SELECT * FROM product ORDER BY id DESC""")
         return dict_fetchall(self.cur)
 
-    def update_product_names(self, product_id, name_uz, name_ru):
+    def update_product_names(self, product_id, name_uz, name_ru, name_en):
         self.cur.execute(
-            """UPDATE product SET name_uz = ?, name_ru = ? WHERE id = ?""",
-            (name_uz, name_ru, product_id),
+            """UPDATE product SET name_uz = ?, name_ru = ?, name_en = ? WHERE id = ?""",
+            (name_uz, name_ru, name_en, product_id),
         )
         self.conn.commit()
 
@@ -200,10 +298,10 @@ class Database:
         )
         self.conn.commit()
 
-    def update_product_descriptions(self, product_id, description_uz, description_ru):
+    def update_product_descriptions(self, product_id, description_uz, description_ru, description_en):
         self.cur.execute(
-            """UPDATE product SET description_uz = ?, description_ru = ? WHERE id = ?""",
-            (description_uz, description_ru, product_id),
+            """UPDATE product SET description_uz = ?, description_ru = ?, description_en = ? WHERE id = ?""",
+            (description_uz, description_ru, description_en, product_id),
         )
         self.conn.commit()
 
@@ -230,8 +328,8 @@ class Database:
         return row[0] if row else 0
 
     def delete_product(self, product_id):
-        # Tarixni saqlash uchun order/order_product ga tegmaymiz.
-        # FK cheklov sabab productni force o'chirishda foreign_keys ni vaqtincha o'chirib ishlatamiz.
+
+
         self.conn.commit()
         self.cur.execute("PRAGMA foreign_keys = OFF")
         try:
@@ -280,7 +378,7 @@ class Database:
                     tuple(product_ids),
                 )
 
-            # Parent=NULL (root) bo'lsa ham barcha ichki kategoriyalar category_ids ga kiradi.
+
             for cid in sorted(category_ids, reverse=True):
                 self.cur.execute("""DELETE FROM category WHERE id = ?""", (cid,))
 
@@ -295,14 +393,13 @@ class Database:
         self.cur.execute("""SELECT * FROM category WHERE parent IS NULL ORDER BY id""")
         return dict_fetchall(self.cur)
 
-    def create_category(self, name_uz, name_ru, parent=None):
+    def create_category(self, name_uz, name_ru, name_en, parent=None):
         self.cur.execute(
-            """INSERT INTO category (name_uz, name_ru, parent) VALUES (?, ?, ?)""",
-            (name_uz, name_ru, parent)
+            """INSERT INTO category (name_uz, name_ru, name_en, parent) VALUES (?, ?, ?, ?)""",
+            (name_uz, name_ru, name_en, parent)
         )
         self.conn.commit()
         return self.cur.lastrowid
-
 
 def dict_fetchall(cursor):
     columns = [col[0] for col in cursor.description]
@@ -310,7 +407,6 @@ def dict_fetchall(cursor):
         dict(zip(columns, row))
         for row in cursor.fetchall()
     ]
-
 
 def dict_fetchone(cursor):
     row = cursor.fetchone()

@@ -7,33 +7,23 @@ import globals
 db = Database(DATA_BASE)
 logger = logging.getLogger("xikmet_food")
 
+def _get_status_text(status, lang_id):
 
-def _get_status_text(status, lang_id): 
-    """
-    Bu funksiya buyurtmaning status kodini o'qiydi va foydalanuvchining tiliga mos ravishda matn ko'rsatadi.
-    Funksiya nomidan avval qo'yilgan "_" belgi bu funksiyani faqat shu modul ichida ishlatish uchun mo'ljallanganligini bildiradi.
-    Yani bu huddi shu funksiyani boshqa moduldan (.py faylidan) import qilib ishlatish mumkin emas, faqat shu fayl ichida chaqirilishi mumkin deganga o'xshaydi.
-    """
-    return globals.ORDER_STATUS_TEXT.get(status, {}).get(lang_id, str(status)) # bu joydagi get metodi, agar ORDER_STATUS_TEXT lug'atida status uchun matn topilmasa, default qiymat sifatida status kodini stringga aylantirib qaytaradi.
 
+    return globals.ORDER_STATUS_TEXT.get(status, {}).get(lang_id, str(status))
 
 def _get_payment_text(payment_type, lang_id):
-    """
-    Bu funksiya to'lov turini o'qiydi va foydalanuvchining tiliga mos ravishda matn ko'rsatadi.
-    """
+
+
     return globals.PAYMENT_TYPES.get(payment_type, {}).get(lang_id, payment_type)
 
-
 def my_orders_handler(update, context):
-    """
-    Bu funksiya foydalanuvchining buyurtmalarini ko'rsatish uchun ishlatiladi. 
-    U callback query orqali chaqiriladi va foydalanuvchining chat_id sini olish orqali uning buyurtmalarini 
-    bazadan olib, ularni formatlab, foydalanuvchiga ko'rsatadi.
-    """
+
+
     query = update.callback_query
     chat_id = query.message.chat_id
 
-    db_user = db.get_user_by_chat_id(chat_id) # bazadan foydalanuvchini chat_id orqali olish, bu orqali foydalanuvchining id sini va tilini aniqlash mumkin bo'ladi.
+    db_user = db.get_user_by_chat_id(chat_id)
     user_id = db_user["id"]
     lang_id = db_user["lang_id"]
 
@@ -46,16 +36,14 @@ def my_orders_handler(update, context):
     text = globals.TEXT_MY_ORDERS_HEADER[lang_id]
 
     for i, order in enumerate(orders, start=1):
-        """
-        bu yerda orders ro'yxatidagi har bir buyurtma uchun, ularni tartib raqami bilan ko'rsatish uchun 
-        enumerate funksiyasi ishlatilmoqda. start=1 parametri esa tartib raqamining 1 dan boshlanishini ta'minlaydi.
-        """
+
+
         order_id = order["id"]
         created_at = order["created_at"]
         status_text = _get_status_text(order["status"], lang_id)
         payment_text = _get_payment_text(order["payment_type"], lang_id)
 
-        text += f"┌ {i}. {globals.TEXT_ORDER_LABEL[lang_id].format(order_id)}\n" # bu yerdagi .format 
+        text += f"┌ {i}. {globals.TEXT_ORDER_LABEL[lang_id].format(order_id)}\n"
         text += f"├ {globals.TEXT_ORDER_TIME[lang_id].format(created_at)}\n"
         text += f"├ {status_text}\n"
         text += f"└ {payment_text}\n\n"
@@ -73,15 +61,9 @@ def my_orders_handler(update, context):
     )
     logger.info(f"Buyurtmalar ro'yxati ko'rsatildi | user_id={chat_id} | soni={len(orders)}")
 
-
 def order_detail_handler(update, context):
-    """
-    Bu funksiya foydalanuvchining buyurtmasi haqida batafsil ma'lumot ko'rsatish uchun ishlatiladi.
-    U callback query orqali chaqiriladi va buyurtmaning id sini callback data dan olish orqali, bazadan 
-    buyurtma haqida ma'lumot olib, ularni formatlab, foydalanuvchiga ko'rsatadi.
-     Bu yerda buyurtmaning id sini callback data dan olish uchun, data_sp o'zgaruvchisi yaratilib, 
-     callback data ni "_" belgisiga bo'lib, ro'yxatga aylantiriladi.
-    """
+
+
     query = update.callback_query
     data_sp = query.data.split("_")
     order_id = int(data_sp[1])
@@ -117,7 +99,7 @@ def order_detail_handler(update, context):
 
         product = db.get_product_by_id(product_id)
         if not product:
-            text += f"  {amount}x [deleted product #{product_id}] - ? so'm\n"
+            text += f"  {amount}x {globals.TEXT_DELETED_PRODUCT[lang_id].format(product_id)} - ? {globals.TEXT_CURRENCY[lang_id]}\n"
             continue
 
         lang_col = f"name_{globals.LANGUAGE_CODE[lang_id]}"
@@ -126,10 +108,10 @@ def order_detail_handler(update, context):
         cost = price * amount
         total_price += cost
 
-        text += f"  {amount}x {name} - {cost} so'm\n"
+        text += f"  {amount}x {name} - {cost} {globals.TEXT_CURRENCY[lang_id]}\n"
 
     text += f"\n{'=' * 30}\n"
-    text += globals.TEXT_ORDER_TOTAL[lang_id].format(total_price)
+    text += globals.TEXT_ORDER_TOTAL[lang_id].format(total_price, globals.TEXT_CURRENCY[lang_id])
 
     buttons = [[
         InlineKeyboardButton(

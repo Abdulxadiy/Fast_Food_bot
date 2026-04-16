@@ -13,13 +13,11 @@ db = Database(DATA_BASE)
 admin_edit_state = {}
 logger = logging.getLogger("xikmet_food")
 
-
 def _slugify_filename(text):
     s = (text or "").strip().lower()
     s = re.sub(r"\s+", "-", s)
     s = re.sub(r"[^a-z0-9_-]", "", s)
     return s or "product"
-
 
 def _build_unique_image_path(base_name):
     os.makedirs("images", exist_ok=True)
@@ -31,7 +29,6 @@ def _build_unique_image_path(base_name):
             return path
         i += 1
 
-
 def _save_photo_to_images(update, product_name_uz):
     if not update.message.photo:
         return None
@@ -41,7 +38,6 @@ def _save_photo_to_images(update, product_name_uz):
     tg_file.download(custom_path=image_path)
     return image_path
 
-
 def _build_products_markup(lang_id):
     products = db.get_all_products()
     if not products:
@@ -49,14 +45,13 @@ def _build_products_markup(lang_id):
         return InlineKeyboardMarkup(buttons)
 
     buttons = []
-    name_col = "name_uz" if lang_id == 1 else "name_ru"
+    name_col = f"name_{admin_globals.LANGUAGE_CODE[lang_id]}"
     for product in products:
         label = f"{product[name_col]} - {product['price']}"
         buttons.append([InlineKeyboardButton(text=label, callback_data=f"adm_ep_{product['id']}")])
 
     buttons.append([InlineKeyboardButton(text=admin_globals.BTN_BACK[lang_id], callback_data="adm_back")])
     return InlineKeyboardMarkup(buttons)
-
 
 def _build_product_edit_menu(lang_id, product_id):
     return InlineKeyboardMarkup(
@@ -68,7 +63,6 @@ def _build_product_edit_menu(lang_id, product_id):
             [InlineKeyboardButton(text=admin_globals.BTN_BACK[lang_id], callback_data="adm_edit")],
         ]
     )
-
 
 def menu_edit_handler(update, context):
     query = update.callback_query
@@ -133,7 +127,6 @@ def menu_edit_handler(update, context):
         admin_menu(context, admin_id, lang_id, query.message.message_id)
         return
 
-
 def handle_admin_edit_text(update, context):
     if update.message is None:
         return False
@@ -161,8 +154,14 @@ def handle_admin_edit_text(update, context):
 
     if step == "edit_name_ru":
         data["name_ru"] = text
+        state["step"] = "edit_name_en"
+        update.message.reply_text(admin_globals.TEXT_ENTER_NEW_NAME_EN[lang_id])
+        return True
+
+    if step == "edit_name_en":
+        data["name_en"] = text
         product_id = data["product_id"]
-        db.update_product_names(product_id, data["name_uz"], data["name_ru"])
+        db.update_product_names(product_id, data["name_uz"], data["name_ru"], data["name_en"])
         logger.info(f"Mahsulot nomi yangilandi | admin_id={admin_id} | product_id={product_id}")
         update.message.reply_text(admin_globals.TEXT_EDIT_SUCCESS[lang_id])
         admin_edit_state.pop(admin_id, None)
@@ -197,8 +196,14 @@ def handle_admin_edit_text(update, context):
 
     if step == "edit_desc_ru":
         data["desc_ru"] = text
+        state["step"] = "edit_desc_en"
+        update.message.reply_text(admin_globals.TEXT_ENTER_NEW_DESC_EN[lang_id])
+        return True
+
+    if step == "edit_desc_en":
+        data["desc_en"] = text
         product_id = data["product_id"]
-        db.update_product_descriptions(product_id, data["desc_uz"], data["desc_ru"])
+        db.update_product_descriptions(product_id, data["desc_uz"], data["desc_ru"], data["desc_en"])
         logger.info(f"Mahsulot tavsifi yangilandi | admin_id={admin_id} | product_id={product_id}")
         update.message.reply_text(admin_globals.TEXT_EDIT_SUCCESS[lang_id])
         admin_edit_state.pop(admin_id, None)

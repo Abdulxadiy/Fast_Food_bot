@@ -23,7 +23,6 @@ logger = logging.getLogger("xikmet_food")
 
 def query_handler(update, context):
     q = update.callback_query
-    logger.info(f"Tugma signali qabul qilindi | data={q.data}")
     chat_id = q.message.chat_id
     db_user = db.get_user_by_chat_id(chat_id)
     message_id = q.message.message_id
@@ -35,11 +34,9 @@ def query_handler(update, context):
         elif data_sp[1] == "adminmenu":
             admin_menu(context, chat_id, db_user["lang_id"])
     if data_sp[0] == "admin":
-        logger.info(f"Admin tugma signali yo'naltirildi | data={q.data}")
         admin_action_handler(update, context)
         return
     if data_sp[0] == "sug":
-        logger.info(f"Fikr tugma signali yo'naltirildi | data={q.data}")
         suggestion_callback_handler(update, context)
         return
     elif data_sp[0] == "adm":
@@ -62,9 +59,7 @@ def query_handler(update, context):
             menu_statistics_handler(update, context)
             return
 
-
     if not db_user:
-        logger.warning(f"Tugma signali foydalanuvchisi topilmadi | chat_id={chat_id} | data={q.data}")
         q.answer()
         return
 
@@ -120,11 +115,10 @@ def query_handler(update, context):
 
     elif data_sp[0] == "order" and len(data_sp) > 1:
         try:
-            int(data_sp[1])  # order_id raqam bo'lsa
+            int(data_sp[1])
             order_detail_handler(update, context)
         except ValueError:
-            pass  # agar order_id raqam bo'lmasa shunchaki - ignore
+            pass
 
     elif data_sp[0] in ["category", "product", "quantity", "buy", "payment", "clear"]:
         inline_handler(update, context)
-
