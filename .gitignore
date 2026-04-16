@@ -206,8 +206,6 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# TOKEN
-config.py
+__init__.py
 
-# venv
 xikmet_venv
