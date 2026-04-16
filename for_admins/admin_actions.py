@@ -23,7 +23,7 @@ from inlines.comments_inline import handle_admin_reply_message, handle_user_comm
 from inlines.setting_inline import handle_settings_text_message
 
 db = Database(DATA_BASE)
-logger = logging.getLogger("xikmet_food")
+logger = logging.getLogger("fast_food")
 admin_awaiting_reason = {}
 
 def admin_action_handler(update: Update, context):

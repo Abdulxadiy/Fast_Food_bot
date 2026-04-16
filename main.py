@@ -11,7 +11,7 @@ import globals
 
 db = Database(DATA_BASE)
 
-logger = logging.getLogger("xikmet_food")
+logger = logging.getLogger("fast_food")
 
 
 logger.setLevel(logging.INFO)

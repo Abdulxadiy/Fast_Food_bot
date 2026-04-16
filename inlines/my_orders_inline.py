@@ -5,7 +5,7 @@ import logging
 import globals
 
 db = Database(DATA_BASE)
-logger = logging.getLogger("xikmet_food")
+logger = logging.getLogger("fast_food")
 
 def _get_status_text(status, lang_id):
 

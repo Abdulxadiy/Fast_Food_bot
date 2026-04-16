@@ -1,4 +1,4 @@
-# Xikmet Food Telegram Bot
+# Fast Food Telegram Bot
 
 <p align="center">
   A multilingual Telegram bot for fast-food ordering, delivery coordination, customer feedback, and owner-side product management.
@@ -13,7 +13,7 @@
 
 ## Overview
 
-**Xikmet Food** is a Telegram-based food ordering system built for a fast-food business. It allows customers to browse categories, select products, place orders, share delivery locations, track previous orders, and send feedback directly from Telegram.
+**Fast Food** is a Telegram-based food ordering system built for a fast-food business. It allows customers to browse categories, select products, place orders, share delivery locations, track previous orders, and send feedback directly from Telegram.
 
 The project also includes an **owner-only admin workflow** for managing the catalog, moderating incoming orders, reviewing customer comments, and viewing sales statistics.
 
@@ -75,7 +75,7 @@ Programming language used in the codebase:
 ## Project Structure
 
 ```text
-Xikmet_Food/
+Fast_Food/
 ├── main.py                    # Bot entry point
 ├── register.py                # Registration flow
 ├── queries.py                 # Callback router
@@ -88,7 +88,7 @@ Xikmet_Food/
 ├── for_admins/                # Admin/owner handlers
 ├── texts/                     # Logs
 ├── db_design/                 # Database design reference
-├── xikmet_food.db             # SQLite database
+├── fast_food.db               # SQLite database
 └── config.py                  # Local configuration
 ```
 
@@ -130,7 +130,7 @@ The bot expects a local `config.py` file with values similar to this:
 
 ```python
 TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
-DATA_BASE = "xikmet_food.db"
+DATA_BASE = "fast_food.db"
 OWNER = 123456789
 ADMIN_CHANNEL = -1001234567890
 COMMENTS_CHANNEL = -1001234567890
@@ -153,7 +153,7 @@ Important:
 
 ```bash
 git clone <your-repository-url>
-cd Xikmet_Food
+cd Fast_Food
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt

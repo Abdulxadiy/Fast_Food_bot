@@ -7,7 +7,7 @@ import globals
 import main_menu
 
 db = Database(DATA_BASE)
-logger = logging.getLogger("xikmet_food")
+logger = logging.getLogger("fast_food")
 
 def inline_handler(update, context):
     query = update.callback_query

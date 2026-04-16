@@ -10,7 +10,7 @@ import logging
 from for_admins import admin_globals
 
 db = Database(DATA_BASE)
-logger = logging.getLogger("xikmet_food")
+logger = logging.getLogger("fast_food")
 FIRST_NAME, LAST_NAME, PHONE = range(3)
 
 def registration(reply, chat_id, context):

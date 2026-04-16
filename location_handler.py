@@ -8,7 +8,7 @@ import logging
 import globals
 
 db = Database(DATA_BASE)
-logger = logging.getLogger("xikmet_food")
+logger = logging.getLogger("fast_food")
 
 def location_handler(update: Update, context):
     user = update.message.from_user

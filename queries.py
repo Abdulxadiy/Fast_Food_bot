@@ -19,7 +19,7 @@ import logging
 import globals
 
 db = Database(DATA_BASE)
-logger = logging.getLogger("xikmet_food")
+logger = logging.getLogger("fast_food")
 
 def query_handler(update, context):
     q = update.callback_query

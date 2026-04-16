@@ -5,9 +5,9 @@ LANGUAGE_CODE = {
 }
 
 WELCOME_TEXT = {
-    1: "😁 Assalomu alaykum, Xikmet Food botiga xush kelibsiz.\nBot haqida ma'lumot olish uchun /info ni bosing.",
-    2: "😁 Здравствуйте! Добро пожаловать в бот Xikmet Food.\nНажмите /info, чтобы узнать информацию о боте.",
-    3: "😁 Welcome to the Xikmet Food bot.\nPress /info to learn more about the bot.",
+    1: "😁 Assalomu alaykum, Fast Food botiga xush kelibsiz.\nBot haqida ma'lumot olish uchun /info ni bosing.",
+    2: "😁 Здравствуйте! Добро пожаловать в бот Fast Food.\nНажмите /info, чтобы узнать информацию о боте.",
+    3: "😁 Welcome to the Fast Food bot.\nPress /info to learn more about the bot.",
 }
 
 CHOOSE_LANG = {
@@ -508,15 +508,15 @@ TEXT_SETTINGS_PHONE_UPDATED = {
 }
 
 TEXT_BOT_INFO = {
-    1: "🤖 Xikmet Food botiga xush kelibsiz!\n\nEndi yaxshi fast food izlab yurishingiz shart emas. Eng mazali taomlarga bot orqali tez va qulay buyurtma berishingiz mumkin.\n\nBu bot orqali siz:\n🛍 Buyurtma berishingiz\n📋 Menyu bilan tanishishingiz\n🚚 Yetkazib berish xizmatidan foydalanishingiz\n📞 Biz bilan tezkor bog'lanishingiz mumkin\n\n⚡️ Qulay, tez va oson buyurtma tizimi.\n🍔 Mazali fast food mahsulotlari sizni kutmoqda!",
-    2: "🤖 Добро пожаловать в бот Xikmet Food!\n\nТеперь вам не нужно искать хороший fast food по городу. Через бот можно быстро и удобно заказать самые вкусные блюда.\n\nС помощью этого бота вы можете:\n🛍 Оформлять заказы\n📋 Смотреть меню\n🚚 Пользоваться доставкой\n📞 Быстро связываться с нами\n\n⚡️ Удобная, быстрая и простая система заказа.\n🍔 Вас ждут вкусные fast food блюда!",
-    3: "🤖 Welcome to the Xikmet Food bot!\n\nYou no longer need to search around for good fast food. You can quickly and easily order delicious meals through the bot.\n\nWith this bot you can:\n🛍 Place orders\n📋 Browse the menu\n🚚 Use delivery service\n📞 Contact us quickly\n\n⚡️ A convenient, fast, and simple ordering system.\n🍔 Delicious fast food is waiting for you!",
+    1: "🤖 Fast Food botiga xush kelibsiz!\n\nEndi yaxshi fast food izlab yurishingiz shart emas. Eng mazali taomlarga bot orqali tez va qulay buyurtma berishingiz mumkin.\n\nBu bot orqali siz:\n🛍 Buyurtma berishingiz\n📋 Menyu bilan tanishishingiz\n🚚 Yetkazib berish xizmatidan foydalanishingiz\n📞 Biz bilan tezkor bog'lanishingiz mumkin\n\n⚡️ Qulay, tez va oson buyurtma tizimi.\n🍔 Mazali fast food mahsulotlari sizni kutmoqda!",
+    2: "🤖 Добро пожаловать в бот Fast Food!\n\nТеперь вам не нужно искать хороший fast food по городу. Через бот можно быстро и удобно заказать самые вкусные блюда.\n\nС помощью этого бота вы можете:\n🛍 Оформлять заказы\n📋 Смотреть меню\n🚚 Пользоваться доставкой\n📞 Быстро связываться с нами\n\n⚡️ Удобная, быстрая и простая система заказа.\n🍔 Вас ждут вкусные fast food блюда!",
+    3: "🤖 Welcome to the Fast Food bot!\n\nYou no longer need to search around for good fast food. You can quickly and easily order delicious meals through the bot.\n\nWith this bot you can:\n🛍 Place orders\n📋 Browse the menu\n🚚 Use delivery service\n📞 Contact us quickly\n\n⚡️ A convenient, fast, and simple ordering system.\n🍔 Delicious fast food is waiting for you!",
 }
 
 TEXT_ABOUT_US = {
-    1: "🍔🍟 Xush kelibsiz! Eng mazali fast food manzili shu yerda!\n\n📍 Manzil: Shahrixon shahar, \"Imkon\" savdo markazi yonida\n\n📞 Murojaat uchun:\n+998 95 422 39 39\n+998 33 422 39 39\n@Xikmet_Foodbot\n\n❗️ Turli fast food mahsulotlari mavjud.\n👨‍🍳 Taomlarimiz malakali oshpazlar tomonidan tayyorlanadi.\n🥩 Faqat sifatli va yangi mahsulotlardan foydalanamiz.\n🚀 Tezkor xizmat va ajoyib ta'm kafolatlanadi!\n\n✨ Bir marta tatib ko'ring, yana qaytasiz!",
-    2: "🍔🍟 Добро пожаловать! Здесь вас ждет вкусный fast food!\n\n📍 Адрес: город Шахрихан, рядом с торговым центром \"Imkon\"\n\n📞 Для связи:\n+998 95 422 39 39\n+998 33 422 39 39\n@Xikmet_Foodbot\n\n❗️ У нас есть разные fast food блюда.\n👨‍🍳 Наши блюда готовят опытные повара.\n🥩 Мы используем только качественные и свежие продукты.\n🚀 Быстрый сервис и отличный вкус гарантированы!\n\n✨ Попробуйте один раз и захотите вернуться снова!",
-    3: "🍔🍟 Welcome! The tastiest fast food is here!\n\n📍 Address: Shahrixon city, near the \"Imkon\" shopping center\n\n📞 Contact:\n+998 95 422 39 39\n+998 33 422 39 39\n@Xikmet_Foodbot\n\n❗️ We offer a variety of fast food items.\n👨‍🍳 Our meals are prepared by skilled chefs.\n🥩 We use only fresh and quality ingredients.\n🚀 Fast service and great taste are guaranteed!\n\n✨ Try it once and you will come back again!",
+    1: "🍔🍟 Xush kelibsiz! Eng mazali fast food manzili shu yerda!\n\n📍 Manzil: Shahrixon shahar, \"Imkon\" savdo markazi yonida\n\n📞 Murojaat uchun:\n+998 95 422 39 39\n+998 33 422 39 39\n@Fast_Foodbot\n\n❗️ Turli fast food mahsulotlari mavjud.\n👨‍🍳 Taomlarimiz malakali oshpazlar tomonidan tayyorlanadi.\n🥩 Faqat sifatli va yangi mahsulotlardan foydalanamiz.\n🚀 Tezkor xizmat va ajoyib ta'm kafolatlanadi!\n\n✨ Bir marta tatib ko'ring, yana qaytasiz!",
+    2: "🍔🍟 Добро пожаловать! Здесь вас ждет вкусный fast food!\n\n📍 Адрес: город Шахрихан, рядом с торговым центром \"Imkon\"\n\n📞 Для связи:\n+998 95 422 39 39\n+998 33 422 39 39\n@Fast_Foodbot\n\n❗️ У нас есть разные fast food блюда.\n👨‍🍳 Наши блюда готовят опытные повара.\n🥩 Мы используем только качественные и свежие продукты.\n🚀 Быстрый сервис и отличный вкус гарантированы!\n\n✨ Попробуйте один раз и захотите вернуться снова!",
+    3: "🍔🍟 Welcome! The tastiest fast food is here!\n\n📍 Address: Shahrixon city, near the \"Imkon\" shopping center\n\n📞 Contact:\n+998 95 422 39 39\n+998 33 422 39 39\n@Fast_Foodbot\n\n❗️ We offer a variety of fast food items.\n👨‍🍳 Our meals are prepared by skilled chefs.\n🥩 We use only fresh and quality ingredients.\n🚀 Fast service and great taste are guaranteed!\n\n✨ Try it once and you will come back again!",
 }
 
 TEXT_FILE_NOT_FOUND = {

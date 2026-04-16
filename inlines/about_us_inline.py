@@ -6,7 +6,7 @@ import logging
 import globals
 
 db = Database(DATA_BASE)
-logger = logging.getLogger("xikmet_food")
+logger = logging.getLogger("fast_food")
 
 def about_us(update, context):
     query = update.callback_query

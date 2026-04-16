@@ -6,7 +6,7 @@ import globals
 import logging
 
 db = Database(DATA_BASE)
-logger = logging.getLogger("xikmet_food")
+logger = logging.getLogger("fast_food")
 
 def _settings_text(db_user):
     lang_id = db_user["lang_id"]

@@ -7,7 +7,7 @@ import globals
 from for_admins import admin_globals
 
 db = Database(DATA_BASE)
-logger = logging.getLogger("xikmet_food")
+logger = logging.getLogger("fast_food")
 ADMIN_REPLY_TARGET = {}
 
 def _build_admin_comment_text(db_user, message_text, suggestion_id, created_at):

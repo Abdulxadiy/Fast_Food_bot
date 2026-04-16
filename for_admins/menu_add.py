@@ -8,7 +8,7 @@ import os
 import re
 
 db = Database(DATA_BASE)
-logger = logging.getLogger("xikmet_food")
+logger = logging.getLogger("fast_food")
 admin_cat_state = {}
 
 def _slugify_filename(text):

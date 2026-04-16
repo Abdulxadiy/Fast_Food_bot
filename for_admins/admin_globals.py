@@ -29,9 +29,9 @@ ADMIN_MENU = {
 }
 
 ADMIN_PANEL_TEXT = {
-    1: "Xikmet Food mahsulotlarini boshqarish paneli 👇",
-    2: "Панель управления товарами Xikmet Food 👇",
-    3: "Xikmet Food product management panel 👇",
+    1: "Fast Food mahsulotlarini boshqarish paneli 👇",
+    2: "Панель управления товарами Fast Food 👇",
+    3: "Fast Food product management panel 👇",
 }
 
 BTN_ADD_PRODUCT = {
@@ -455,15 +455,15 @@ BTN_STAT_ALL = {
 }
 
 TEXT_STAT_MONTH_HEADER = {
-    1: "📊 [Xikmet Food] 1 oylik statistika\nSo'nggi 30 kun (faqat qabul qilingan buyurtmalar)\n",
-    2: "📊 [Xikmet Food] Статистика за 1 месяц\nПоследние 30 дней (только принятые заказы)\n",
-    3: "📊 [Xikmet Food] Monthly statistics\nLast 30 days (accepted orders only)\n",
+    1: "📊 [Fast Food] 1 oylik statistika\nSo'nggi 30 kun (faqat qabul qilingan buyurtmalar)\n",
+    2: "📊 [Fast Food] Статистика за 1 месяц\nПоследние 30 дней (только принятые заказы)\n",
+    3: "📊 [Fast Food] Monthly statistics\nLast 30 days (accepted orders only)\n",
 }
 
 TEXT_STAT_ALL_HEADER = {
-    1: "📊 [Xikmet Food] Umumiy statistika\nBarcha davr (faqat qabul qilingan buyurtmalar)\n",
-    2: "📊 [Xikmet Food] Общая статистика\nЗа все время (только принятые заказы)\n",
-    3: "📊 [Xikmet Food] Overall statistics\nAll time (accepted orders only)\n",
+    1: "📊 [Fast Food] Umumiy statistika\nBarcha davr (faqat qabul qilingan buyurtmalar)\n",
+    2: "📊 [Fast Food] Общая статистика\nЗа все время (только принятые заказы)\n",
+    3: "📊 [Fast Food] Overall statistics\nAll time (accepted orders only)\n",
 }
 
 TEXT_STAT_EMPTY = {

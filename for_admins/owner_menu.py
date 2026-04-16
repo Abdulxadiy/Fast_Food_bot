@@ -2,7 +2,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from for_admins import admin_globals
 import logging
 
-logger = logging.getLogger("xikmet_food")
+logger = logging.getLogger("fast_food")
 
 def admin_menu(context, chat_id, lang_id, message_id=None):
     buttons = [

@@ -11,7 +11,7 @@ from for_admins.owner_menu import admin_menu
 
 db = Database(DATA_BASE)
 admin_edit_state = {}
-logger = logging.getLogger("xikmet_food")
+logger = logging.getLogger("fast_food")
 
 def _slugify_filename(text):
     s = (text or "").strip().lower()

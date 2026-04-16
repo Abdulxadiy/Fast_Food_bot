@@ -7,7 +7,7 @@ from for_admins import admin_globals
 from for_admins.owner_menu import admin_menu
 
 db = Database(DATA_BASE)
-logger = logging.getLogger("xikmet_food")
+logger = logging.getLogger("fast_food")
 
 def _build_stat_menu(lang_id):
     return InlineKeyboardMarkup(

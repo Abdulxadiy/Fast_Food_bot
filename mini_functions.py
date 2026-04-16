@@ -5,7 +5,7 @@ from database import Database
 from config import DATA_BASE
 
 db = Database(DATA_BASE)
-logger = logging.getLogger("xikmet_food")
+logger = logging.getLogger("fast_food")
 
 def fix_phone_number(number, db_user=None, update=None, context=None):
     if not number:
@@ -16,7 +16,7 @@ def fix_phone_number(number, db_user=None, update=None, context=None):
     if not n.startswith("+998") or len(n) != 13 or not n[1:].isdigit():
         if db_user and update:
             update.message.reply_text(globals.FIX_PHONE_NUMBER[db_user['lang_id']])
-        elif update:
+        elif db_user and update:
             update.message.reply_text(globals.FIX_PHONE_NUMBER[db_user['lang_id']])
         return None
     return n

@@ -2,7 +2,7 @@ from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 import logging
 import globals
 
-logger = logging.getLogger("xikmet_food")
+logger = logging.getLogger("fast_food")
 
 def send_main_menu(context, chat_id, lang_id, message_id=None):
     buttons = [
